@@ -1,0 +1,14 @@
+name: Utilities
+version: '${project.version}'
+main: misc.utilities.Utilities
+api-version: 1.19
+authors: [Leo13]
+description: A plugin for general purpose (cool stuff).
+commands:
+  utility:
+    description: The main command for the Utilities plugin.
+    permission: utility.main
+permissions:
+  utility.main:
+    description: Allows you to use the main command for the Utilities plugin.
+    default: op
