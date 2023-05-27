@@ -1,8 +1,9 @@
 package misc.utilities;
 
-import misc.utilities.commands.Reload;
-import misc.utilities.listeners.BlockCactus;
-import misc.utilities.listeners.BlockSugarCane;
+import misc.utilities.commands.ReloadConfig;
+import misc.utilities.commands.ServerReboot;
+import misc.utilities.listeners.BoneMealBlocks;
+import misc.utilities.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.Plugin;
@@ -17,7 +18,7 @@ public final class Utilities extends JavaPlugin {
         this.saveDefaultConfig();
 
         plugin = this;
-        System.out.println(PREFIX + ChatColor.GREEN +  " Hello! I have been successfully enabled.");
+        Util.log(ChatColor.GREEN +  " Hello! I have been successfully enabled.");
 
         // Registering the plugin commands
         registerCommands();
@@ -28,7 +29,7 @@ public final class Utilities extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        System.out.println(PREFIX + ChatColor.GREEN + " Bye bye!");
+        Util.log(ChatColor.GREEN + " Bye bye!");
     }
 
     public static Plugin getPlugin() {
@@ -37,11 +38,13 @@ public final class Utilities extends JavaPlugin {
 
     private void registerCommands() {
         PluginCommand utility = this.getCommand("utility");
-        if (utility != null) utility.setExecutor(new Reload());
+        if (utility != null) utility.setExecutor(new ReloadConfig());
+
+        PluginCommand reboot = this.getCommand("reboot");
+        if (reboot != null) reboot.setExecutor(new ServerReboot());
     }
 
     private void registerEvents() {
-        this.getServer().getPluginManager().registerEvents(new BlockSugarCane(), this);
-        this.getServer().getPluginManager().registerEvents(new BlockCactus(), this);
+        this.getServer().getPluginManager().registerEvents(new BoneMealBlocks(), this);
     }
 }

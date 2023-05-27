@@ -1,0 +1,9 @@
+# Decides whether players should be able to bone meal sugar cane or not.
+# No permission is involved here
+# Default: false
+bone-meal-sugar-cane: true
+
+# Decides whether players should be able to bone meal cactus or not.
+# No permission is involved here
+# Default: false
+bone-meal-cactus: true
