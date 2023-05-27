@@ -7,3 +7,9 @@ bone-meal-sugar-cane: true
 # No permission is involved here
 # Default: false
 bone-meal-cactus: true
+
+warnings:
+  - 1
+  - 2
+  - 3
+  - 4

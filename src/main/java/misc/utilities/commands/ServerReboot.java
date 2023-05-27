@@ -1,5 +1,6 @@
 package misc.utilities.commands;
 
+import misc.utilities.util.Util;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -33,7 +34,8 @@ public class ServerReboot implements TabExecutor {
         String reason = args.length < 2 ? null : getReason(args);
         String formatted = formatTime(time);
 
-        Bukkit.broadcast(MiniMessage.miniMessage().deserialize(formatted + " Reason: " + reason));
+        Util.restart(time.toSeconds());
+
         return true;
     }
 

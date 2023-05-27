@@ -5,8 +5,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -30,11 +30,21 @@ public class Util {
         return null;
     }
 
-    public static void restart(@Nullable String reason) {
+    public static void restart(long time) {
+        final List<String> warnings = Utilities.getPlugin().getConfig().getStringList("warnings");
 
+        setInterval(() -> {
+            long count = time;
+
+            if (warnings.contains(String.valueOf(count))) {
+
+            }
+
+            count--;
+        });
     }
 
-    private static void setInterval(Runnable runnable, long delay) {
+    private static void setInterval(Runnable runnable) {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
@@ -42,7 +52,7 @@ public class Util {
             }
         };
 
-        timer.scheduleAtFixedRate(task, 0, delay);
+        timer.scheduleAtFixedRate(task, 0, 1000);
     }
 
     public static void log(String x) {
