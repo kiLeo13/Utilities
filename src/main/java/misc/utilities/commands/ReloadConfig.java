@@ -26,7 +26,6 @@ public class ReloadConfig implements TabExecutor {
 
         Utilities.getPlugin().reloadConfig();
         sender.sendRichMessage("<green>Configuration has been successfully reloaded!");
-
         return true;
     }
 

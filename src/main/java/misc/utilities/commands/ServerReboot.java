@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
 import java.time.Duration;
 import java.util.List;
 
@@ -25,16 +24,32 @@ public class ServerReboot implements TabExecutor {
 
         try {
             long input = args.length < 1 ? 10 : Long.parseLong(args[0]);
+
+            if (input < 10) {
+                sender.sendRichMessage("<red>You cannot set a value less than <gold>10<red>.");
+                return true;
+            }
+
             time = Duration.ofSeconds(input);
         } catch (NumberFormatException e) {
             if (args.length >= 1 && args[0].equalsIgnoreCase("cancel")) {
-                Util.cancelRestartSchedule(args.length >= 2 ? reason : null);
 
-                sender.sendRichMessage("<yellow><i>Cancelling restart...");
+                if (!Util.isIsRestartScheduled()) {
+                    sender.sendRichMessage("<red>There is already no restart scheduled.");
+                } else {
+                    Util.cancelRestartSchedule(args.length >= 2 ? reason : null);
+                    sender.sendRichMessage("<yellow><i>Cancelling restart...");
+                }
+
                 return true;
             }
 
             sender.sendRichMessage("<red>Invalid time format! Please provide a number (in seconds).");
+            return true;
+        }
+
+        if (Util.isIsRestartScheduled()) {
+            sender.sendRichMessage("<red>There is already a restart scheduled! Run <gold>/reboot cancel<red> to cancel the current one and schedule another one.");
             return true;
         }
 

@@ -2,7 +2,6 @@ package misc.utilities.util;
 
 import misc.utilities.Utilities;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -33,18 +32,11 @@ public class Util {
 
     public static void restart(Duration duration, String reason) {
         long time = duration.toSeconds();
-        final double pitch = Utilities.getPlugin().getConfig().getDouble("pitch");
-        final Collection<? extends Player> players = Bukkit.getOnlinePlayers();
+        double pitch = Utilities.getPlugin().getConfig().getDouble("restart-sound-pitch");
+        Collection<? extends Player> players = Bukkit.getOnlinePlayers();
         final String inputSound = Utilities.getPlugin().getConfig().getString("restart-warning-sound");
-        final Optional<Sound> sound = fetchSound(inputSound);
-        final String broadcast = getRestartBroadcast(reason, duration);
-
-        // This is the first broadcast that will be sent (when someone run the command)
-        for (Player p : players) {
-            if (broadcast != null) p.sendRichMessage(broadcast);
-
-            sound.ifPresent(s -> p.playSound(p, s, SoundCategory.MASTER, 1, (float) pitch));
-        }
+        Optional<Sound> sound = fetchSound(inputSound);
+        final String broadcast = getRestartBroadcast(reason);
 
         isRestartScheduled = true;
 
@@ -57,7 +49,7 @@ public class Util {
 
                 if (warnings.contains(String.valueOf(count))) {
                     for (Player p : players) {
-                        if (broadcast != null) p.sendMessage(MiniMessage.miniMessage().deserialize(broadcast, Placeholder.parsed("<time>", count < 10 ? "0" + count : String.valueOf(count))));
+                        if (broadcast != null) p.sendMessage(MiniMessage.miniMessage().deserialize(broadcast.replaceAll("<time>", formatTime(Duration.ofSeconds(count)))));
 
                         sound.ifPresent(s -> p.playSound(p, s, SoundCategory.MASTER, 1, (float) pitch));
                     }
@@ -104,25 +96,35 @@ public class Util {
         return builder.substring(0, builder.length() - 2).stripTrailing();
     }
 
-    private static String getRestartBroadcast(String reason, Duration duration) {
-        String broadcastBuilder = reason == null
-                ? Utilities.getPlugin().getConfig().getString("restart-warning-text")
-                : Utilities.getPlugin().getConfig().getString("restart-warning-text-reason");
+    private static String getRestartBroadcast(String reason) {
+        String broadcastBuilder = Utilities.getPlugin().getConfig().getString(reason == null ? "restart-warning-text" : "restart-warning-text-reason");
 
         // Placeholders lol
-        if (broadcastBuilder != null) {
-            broadcastBuilder = broadcastBuilder
-                    .replaceAll("<time>", formatTime(duration));
-
-            if (reason != null)
-                broadcastBuilder = broadcastBuilder.replaceAll("<reason>", reason);
-        }
+        if (broadcastBuilder != null && reason != null)
+            broadcastBuilder = broadcastBuilder.replaceAll("<reason>", reason);
 
         return broadcastBuilder;
     }
 
     public static void cancelRestartSchedule(String reason) {
-        
+        String broadcast = Utilities.getPlugin().getConfig().getString(reason == null ? "restart-cancel-text" : "restart-cancel-text-reason");
+        String inputSound = Utilities.getPlugin().getConfig().getString("restart-warning-cancel-sound");
+        final Optional<Sound> sound = fetchSound(inputSound);
+        double pitch = Utilities.getPlugin().getConfig().getDouble("restart-cancel-sound-pitch");
+        Collection<? extends Player> players = Bukkit.getOnlinePlayers();
+
+        if (broadcast != null && reason != null) {
+            broadcast = broadcast.replaceAll("<reason>", reason);
+        }
+
+        for (Player p : players) {
+            if (broadcast != null) p.sendRichMessage(broadcast);
+
+            sound.ifPresent(s -> p.playSound(p, s, 1, (float) pitch));
+        }
+
+        timer.cancel();
+        isRestartScheduled = false;
     }
 
     public static boolean isIsRestartScheduled() {
