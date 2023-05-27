@@ -1,15 +1,47 @@
 # Decides whether players should be able to bone meal sugar cane or not.
-# No permission is involved here
+# No permission is involved here.
 # Default: false
 bone-meal-sugar-cane: true
 
 # Decides whether players should be able to bone meal cactus or not.
-# No permission is involved here
+# No permission is involved here.
 # Default: false
 bone-meal-cactus: true
 
+######################################################################
+## RESTART SCHEDULE SYSTEM
+
+# The message that will be sent to everyone in the server about the server restart.
+# Placeholders:
+#    <remain> - how much time left until the restart (i.e: ).
+#    <moment> - when the server will restart (i.e: 01/01/2000 at 13:34:27).
+# Leaving this blank means nothing will be broadcast.
+restart-warning-text: "<yellow>This server will restart in <time>"
+
+# The message that will be sent to everyone in the server about the server restart IF a reason is provided.
+# Placeholders:
+#    <remain> - how much time left until the restart (i.e: ).
+#    <moment> - when the server will restart (i.e: 01/01/2000 at 13:34:27).
+#    <reason> - the reason of the restart.
+# Leaving this blank means nothing will be broadcast.
+restart-warning-text-reason: "<yellow>This server will restart in <time>\nReason: <reason>"
+
+# The sound effect that will be played to everyone when the warning text is sent.
+# Leave this empty for no sound effect.
+# Reference: https://jd.papermc.io/paper/1.19/org/bukkit/Sound.html
+restart-warning-sound: BLOCK_NOTE_BLOCK_HAT
+
+# The pitch of the sound effect you provided above.
+# This option is ignored if the above one is empty.
+# Default: 1
+pitch: 1
+
+# When (in seconds) should we send the warnings you set up above?
+# Leaving this empty will make it don't broadcast anything
 warnings:
-  - 1
-  - 2
-  - 3
-  - 4
+  - '1'
+  - '2'
+  - '3'
+  - '10'
+  - '30'
+  - '60'

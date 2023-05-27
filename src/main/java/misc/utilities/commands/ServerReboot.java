@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
+import java.util.Collection;
 import java.util.List;
 
 public class ServerReboot implements TabExecutor {
@@ -31,10 +32,10 @@ public class ServerReboot implements TabExecutor {
             return true;
         }
 
+        final Collection<? extends Player> players = Bukkit.getOnlinePlayers();
         String reason = args.length < 2 ? null : getReason(args);
-        String formatted = formatTime(time);
 
-        Util.restart(time.toSeconds());
+        Util.restart(time, reason);
 
         return true;
     }
@@ -63,21 +64,5 @@ public class ServerReboot implements TabExecutor {
             builder.append(s).append(" ");
 
         return builder.toString().stripTrailing();
-    }
-
-    private String formatTime(Duration duration) {
-        final StringBuilder builder = new StringBuilder();
-
-        int seconds = duration.toSecondsPart();
-        int minutes = duration.toMinutesPart();
-        int hours = duration.toHoursPart();
-        int days = duration.toHoursPart();
-
-        if (days != 0) builder.append(String.format("<red>%s<yellow>d, ", days < 10 ? "0" + days : days));
-        if (hours != 0) builder.append(String.format("<red>%s<yellow>h, ", hours < 10 ? "0" + hours : hours));
-        if (minutes != 0) builder.append(String.format("<red>%s<yellow>m, ", minutes < 10 ? "0" + minutes : minutes));
-        if (seconds != 0) builder.append(String.format("<red>%s<yellow>s, ", seconds < 10 ? "0" + seconds : seconds));
-
-        return builder.substring(0, builder.length() - 2).stripTrailing();
     }
 }
