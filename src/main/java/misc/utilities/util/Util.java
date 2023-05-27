@@ -11,6 +11,7 @@ import java.time.Duration;
 import java.util.*;
 
 public class Util {
+    private static boolean isRestartScheduled;
     private static final Timer timer = new Timer();
 
     public static Block getFreeBlock(Location location, Material column) {
@@ -36,17 +37,16 @@ public class Util {
         final Collection<? extends Player> players = Bukkit.getOnlinePlayers();
         final String inputSound = Utilities.getPlugin().getConfig().getString("restart-warning-sound");
         final Optional<Sound> sound = fetchSound(inputSound);
-        final String broadcast = reason == null
-                ? Utilities.getPlugin().getConfig().getString("restart-warning-text")
-                : Utilities.getPlugin().getConfig().getString("restart-warning-text-reason");
+        final String broadcast = getRestartBroadcast(reason, duration);
 
-
-
-        players.forEach(p -> {
+        // This is the first broadcast that will be sent (when someone run the command)
+        for (Player p : players) {
             if (broadcast != null) p.sendRichMessage(broadcast);
 
             sound.ifPresent(s -> p.playSound(p, s, SoundCategory.MASTER, 1, (float) pitch));
-        });
+        }
+
+        isRestartScheduled = true;
 
         timer.scheduleAtFixedRate(new TimerTask() {
             final List<String> warnings = Utilities.getPlugin().getConfig().getStringList("warnings");
@@ -88,7 +88,7 @@ public class Util {
         Bukkit.getLogger().info(Utilities.PREFIX + " " + x);
     }
 
-    private String formatTime(Duration duration) {
+    private static String formatTime(Duration duration) {
         final StringBuilder builder = new StringBuilder();
 
         int seconds = duration.toSecondsPart();
@@ -96,11 +96,36 @@ public class Util {
         int hours = duration.toHoursPart();
         int days = duration.toHoursPart();
 
-        if (days != 0) builder.append(String.format("<red>%s<yellow>d, ", days < 10 ? "0" + days : days));
-        if (hours != 0) builder.append(String.format("<red>%s<yellow>h, ", hours < 10 ? "0" + hours : hours));
-        if (minutes != 0) builder.append(String.format("<red>%s<yellow>m, ", minutes < 10 ? "0" + minutes : minutes));
-        if (seconds != 0) builder.append(String.format("<red>%s<yellow>s, ", seconds < 10 ? "0" + seconds : seconds));
+        if (days != 0) builder.append(String.format("<red>%s<gold>d<reset>, ", days < 10 ? "0" + days : days));
+        if (hours != 0) builder.append(String.format("<red>%s<gold>h<reset>, ", hours < 10 ? "0" + hours : hours));
+        if (minutes != 0) builder.append(String.format("<red>%s<gold>m<reset>, ", minutes < 10 ? "0" + minutes : minutes));
+        if (seconds != 0) builder.append(String.format("<red>%s<gold>s<reset>, ", seconds < 10 ? "0" + seconds : seconds));
 
         return builder.substring(0, builder.length() - 2).stripTrailing();
+    }
+
+    private static String getRestartBroadcast(String reason, Duration duration) {
+        String broadcastBuilder = reason == null
+                ? Utilities.getPlugin().getConfig().getString("restart-warning-text")
+                : Utilities.getPlugin().getConfig().getString("restart-warning-text-reason");
+
+        // Placeholders lol
+        if (broadcastBuilder != null) {
+            broadcastBuilder = broadcastBuilder
+                    .replaceAll("<time>", formatTime(duration));
+
+            if (reason != null)
+                broadcastBuilder = broadcastBuilder.replaceAll("<reason>", reason);
+        }
+
+        return broadcastBuilder;
+    }
+
+    public static void cancelRestartSchedule(String reason) {
+        
+    }
+
+    public static boolean isIsRestartScheduled() {
+        return isRestartScheduled;
     }
 }

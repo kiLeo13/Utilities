@@ -11,20 +11,28 @@ bone-meal-cactus: true
 ######################################################################
 ## RESTART SCHEDULE SYSTEM
 
-# The message that will be sent to everyone in the server about the server restart.
+# The message that will be sent to everyone about the server restart.
 # Placeholders:
-#    <remain> - how much time left until the restart (i.e: ).
-#    <moment> - when the server will restart (i.e: 01/01/2000 at 13:34:27).
+#    <time> - how much time left until the restart (i.e: ).
 # Leaving this blank means nothing will be broadcast.
 restart-warning-text: "<yellow>This server will restart in <time>"
 
-# The message that will be sent to everyone in the server about the server restart IF a reason is provided.
+# The message that will be sent to everyone about the server restart IF a reason is provided.
 # Placeholders:
-#    <remain> - how much time left until the restart (i.e: ).
-#    <moment> - when the server will restart (i.e: 01/01/2000 at 13:34:27).
+#    <time> - how much time left until the restart (i.e: ).
 #    <reason> - the reason of the restart.
 # Leaving this blank means nothing will be broadcast.
 restart-warning-text-reason: "<yellow>This server will restart in <time>\nReason: <reason>"
+
+# The message that will be sent to everyone if the restart is cancelled.
+# Leaving this blank means nothing will be broadcast.
+restart-cancel-text: "<yellow>The restart was cancelled."
+
+# The message that will be sent to everyone if the restart is cancelled.
+# Placeholders:
+#    <reason> - the reason of why it was cancelled.
+# Leaving this blank means nothing will be broadcast.
+restart-cancel-text-reason: "<yellow>The restart was cancelled.\nReason: <reason>"
 
 # The sound effect that will be played to everyone when the warning text is sent.
 # Leave this empty for no sound effect.

@@ -1,8 +1,6 @@
 package misc.utilities.commands;
 
 import misc.utilities.util.Util;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -11,8 +9,8 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
 import java.time.Duration;
-import java.util.Collection;
 import java.util.List;
 
 public class ServerReboot implements TabExecutor {
@@ -23,20 +21,24 @@ public class ServerReboot implements TabExecutor {
         if (!(sender instanceof Player) && !(sender instanceof ConsoleCommandSender)) return true;
 
         Duration time;
+        String reason = args.length < 2 ? null : getReason(args);
 
         try {
             long input = args.length < 1 ? 10 : Long.parseLong(args[0]);
             time = Duration.ofSeconds(input);
         } catch (NumberFormatException e) {
+            if (args.length >= 1 && args[0].equalsIgnoreCase("cancel")) {
+                Util.cancelRestartSchedule(args.length >= 2 ? reason : null);
+
+                sender.sendRichMessage("<yellow><i>Cancelling restart...");
+                return true;
+            }
+
             sender.sendRichMessage("<red>Invalid time format! Please provide a number (in seconds).");
             return true;
         }
 
-        final Collection<? extends Player> players = Bukkit.getOnlinePlayers();
-        String reason = args.length < 2 ? null : getReason(args);
-
         Util.restart(time, reason);
-
         return true;
     }
 
@@ -44,11 +46,11 @@ public class ServerReboot implements TabExecutor {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         switch (args.length) {
             case 1 -> {
-                return List.of("time");
+                return List.of("<time>", "cancel");
             }
 
             case 2 -> {
-                return List.of("reason");
+                return List.of("<reason>");
             }
 
             default -> {
