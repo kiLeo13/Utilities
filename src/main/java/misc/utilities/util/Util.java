@@ -11,7 +11,7 @@ import java.util.*;
 
 public class Util {
     private static boolean isRestartScheduled;
-    private static final Timer timer = new Timer();
+    private static Timer timer;
 
     public static Block getFreeBlock(Location location, Material column) {
         if (location == null || column == null)
@@ -31,6 +31,8 @@ public class Util {
     }
 
     public static void restart(Duration duration, String reason) {
+        timer = new Timer();
+
         long time = duration.toSeconds();
         double pitch = Utilities.getPlugin().getConfig().getDouble("restart-sound-pitch");
         Collection<? extends Player> players = Bukkit.getOnlinePlayers();
@@ -80,20 +82,28 @@ public class Util {
         Bukkit.getLogger().info(Utilities.PREFIX + " " + x);
     }
 
-    private static String formatTime(Duration duration) {
-        final StringBuilder builder = new StringBuilder();
+    public static String formatTime(Duration duration) {
+        String template = Utilities.getPlugin().getConfig().getString("time-placeholder");
+        final String templateDefault = "<red><day><gold>d<yellow>, <red><hour><gold>h<yellow>, <red><minute><gold>m<yellow>, <red><second><gold>s<yellow>";
+        final HashMap<String, String> placeholders = new HashMap<>();
 
         int seconds = duration.toSecondsPart();
         int minutes = duration.toMinutesPart();
         int hours = duration.toHoursPart();
         int days = duration.toHoursPart();
 
-        if (days != 0) builder.append(String.format("<red>%s<gold>d<reset>, ", days < 10 ? "0" + days : days));
-        if (hours != 0) builder.append(String.format("<red>%s<gold>h<reset>, ", hours < 10 ? "0" + hours : hours));
-        if (minutes != 0) builder.append(String.format("<red>%s<gold>m<reset>, ", minutes < 10 ? "0" + minutes : minutes));
-        if (seconds != 0) builder.append(String.format("<red>%s<gold>s<reset>, ", seconds < 10 ? "0" + seconds : seconds));
+        placeholders.put("<second>", seconds < 10 ? "0" + seconds : String.valueOf(seconds));
+        placeholders.put("<minute>", minutes < 10 ? "0" + minutes : String.valueOf(minutes));
+        placeholders.put("<hour>", hours < 10 ? "0" + hours : String.valueOf(hours));
+        placeholders.put("<day>", days < 10 ? "0" + days : String.valueOf(days));
 
-        return builder.substring(0, builder.length() - 2).stripTrailing();
+        if (template == null)
+            template = templateDefault;
+
+        for (String k : placeholders.keySet())
+            template = template.replaceAll(k, placeholders.get(k));
+
+        return template;
     }
 
     private static String getRestartBroadcast(String reason) {

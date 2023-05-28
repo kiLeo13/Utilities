@@ -53,6 +53,7 @@ public class ServerReboot implements TabExecutor {
             return true;
         }
 
+        sender.sendRichMessage("<yellow>Restart scheduled to " + Util.formatTime(time) + " <yellow>from now.");
         Util.restart(time, reason);
         return true;
     }

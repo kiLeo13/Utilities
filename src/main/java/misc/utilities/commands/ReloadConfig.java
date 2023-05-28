@@ -1,7 +1,6 @@
 package misc.utilities.commands;
 
 import misc.utilities.Utilities;
-import misc.utilities.util.Util;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -24,8 +23,13 @@ public class ReloadConfig implements TabExecutor {
             return true;
         }
 
-        Utilities.getPlugin().reloadConfig();
-        sender.sendRichMessage("<green>Configuration has been successfully reloaded!");
+        if (args[0].equalsIgnoreCase("reload")) {
+            Utilities.getPlugin().reloadConfig();
+            sender.sendRichMessage("<green>Configuration has been successfully reloaded!");
+        } else {
+            sender.sendRichMessage("<red>Unknown argument.");
+        }
+
         return true;
     }
 

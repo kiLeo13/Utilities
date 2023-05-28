@@ -1,3 +1,6 @@
+# In this file you can setup all kinds of configuration.
+# MiniMessages are supported (i.e: <yellow><bold>HELLO</bold> everyone!)
+
 # Decides whether players should be able to bone meal sugar cane or not.
 # No permission is involved here.
 # Default: false
@@ -10,7 +13,7 @@ bone-meal-cactus: true
 
 ########################################
 ##
-#### RESTART SCHEDULE SYSTEM
+## RESTART SCHEDULE SYSTEM
 ##
 
 # The message that will be sent to everyone about the server restart.
@@ -65,3 +68,11 @@ warnings:
   - '10'
   - '30'
   - '60'
+
+# Here you can setup how the <time> placeholder should be displayed.
+# Placeholders:
+#    <second> - How many seconds.
+#    <minute> - How many minutes.
+#    <hour> - How many hours.
+#    <day> - How many days.
+time-placeholder: "<red><day><gold>d<yellow>, <red><hour><gold>h<yellow>, <red><minute><gold>m<yellow>, <red><second><gold>s<yellow>"
