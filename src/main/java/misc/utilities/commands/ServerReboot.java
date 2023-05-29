@@ -1,5 +1,6 @@
 package misc.utilities.commands;
 
+import misc.utilities.util.Parsers;
 import misc.utilities.util.Util;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -53,7 +54,7 @@ public class ServerReboot implements TabExecutor {
             return true;
         }
 
-        sender.sendRichMessage("<yellow>Restart scheduled to " + Util.formatTime(time) + " <yellow>from now.");
+        sender.sendRichMessage("<yellow>Restart scheduled to " + Parsers.time(time) + " <yellow>from now.");
         Util.restart(time, reason);
         return true;
     }
@@ -62,7 +63,7 @@ public class ServerReboot implements TabExecutor {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         switch (args.length) {
             case 1 -> {
-                return List.of("<time>", "cancel");
+                return Util.suggest(args[0], "<time>", "cancel");
             }
 
             case 2 -> {

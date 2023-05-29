@@ -21,7 +21,7 @@ public class BoneMealBlocks implements Listener {
         ItemStack handItem = player.getEquipment().getItemInMainHand();
         World world = player.getWorld();
 
-        if (clickedBlock == null) return;
+        if (clickedBlock == null || event.getAction().isLeftClick()) return;
 
         // We have to make this check as two events are fired (one for each hand)
         // Along with checking if the item in their hand is a bone meal
@@ -32,7 +32,7 @@ public class BoneMealBlocks implements Listener {
         switch (clickedBlock.getType()) {
 
             // If you bone meal a sugar cane
-            case SUGAR_CANE: {
+            case SUGAR_CANE -> {
                 boolean canGrow = Utilities.getPlugin().getConfig().getBoolean("bone-meal-sugar-cane");
                 if (!canGrow) return;
 
@@ -40,11 +40,10 @@ public class BoneMealBlocks implements Listener {
                 if (sugarCane == null) return;
 
                 sugarCane.setType(Material.SUGAR_CANE);
-                break;
             }
 
             // If you bone meal a cactus
-            case CACTUS: {
+            case CACTUS -> {
                 boolean canGrow = Utilities.getPlugin().getConfig().getBoolean("bone-meal-cactus");
                 if (!canGrow) return;
 
@@ -52,10 +51,11 @@ public class BoneMealBlocks implements Listener {
                 if (cactus == null) return;
 
                 cactus.setType(Material.CACTUS);
-                break;
             }
 
-            default: return;
+            default -> {
+                return;
+            }
         }
 
         world.spawnParticle(Particle.VILLAGER_HAPPY, clickedBlock.getLocation().add(0.5, 0.5, 0.5), 5, 0.3, 0.3, 0.3);

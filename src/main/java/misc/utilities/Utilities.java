@@ -3,6 +3,8 @@ package misc.utilities;
 import misc.utilities.commands.ReloadConfig;
 import misc.utilities.commands.ServerReboot;
 import misc.utilities.listeners.BoneMealBlocks;
+import misc.utilities.listeners.PlayerMovement;
+import misc.utilities.listeners.ToggleFlight;
 import misc.utilities.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.command.PluginCommand;
@@ -46,5 +48,7 @@ public final class Utilities extends JavaPlugin {
 
     private void registerEvents() {
         this.getServer().getPluginManager().registerEvents(new BoneMealBlocks(), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerMovement(), this);
+        this.getServer().getPluginManager().registerEvents(new ToggleFlight(), this);
     }
 }

@@ -1,15 +1,19 @@
 # In this file you can setup all kinds of configuration.
 # MiniMessages are supported (i.e: <yellow><bold>HELLO</bold> everyone!)
 
+# Should players be able to double jump? (if true it may break any other fly plugin you have).
+# It requires 'utility.doublejump' permission to be granted (except for OPs).
+double-jump: false
+
 # Decides whether players should be able to bone meal sugar cane or not.
 # No permission is involved here.
 # Default: false
-bone-meal-sugar-cane: true
+bone-meal-sugar-cane: false
 
 # Decides whether players should be able to bone meal cactus or not.
 # No permission is involved here.
 # Default: false
-bone-meal-cactus: true
+bone-meal-cactus: false
 
 ########################################
 ##
@@ -62,17 +66,10 @@ restart-cancel-sound-pitch: 1
 # When (in seconds) should we send the warnings you set up above?
 # Leaving this empty will make it don't broadcast anything
 warnings:
+  - '0'
   - '1'
   - '2'
   - '3'
   - '10'
   - '30'
   - '60'
-
-# Here you can setup how the <time> placeholder should be displayed.
-# Placeholders:
-#    <second> - How many seconds.
-#    <minute> - How many minutes.
-#    <hour> - How many hours.
-#    <day> - How many days.
-time-placeholder: "<red><day><gold>d<yellow>, <red><hour><gold>h<yellow>, <red><minute><gold>m<yellow>, <red><second><gold>s<yellow>"

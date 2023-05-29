@@ -20,3 +20,6 @@ permissions:
   utility.reboot:
     description: Allows you to restart the server.
     default: op
+  utility.doublejump:
+    description: Allows players to double jump.
+    default: op
